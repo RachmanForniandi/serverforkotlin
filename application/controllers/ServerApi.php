@@ -51,4 +51,48 @@ class ServerApi extends CI_Controller {
         }
         echo json_encode($response);
     }
+
+    public function updateUser(){
+        $id = $this->input->post('id');
+        $name = $this->input->post('name');
+        $alamat = $this->input->post('alamat');
+        $email = $this->input->post('email');
+        $password = $this->input->post('password');
+
+        $this->db->where('id_user',$id);
+        $data['name_user']= $name;
+        $data['alamat_user']= $alamat;
+        $data['email_user']= $email;
+        $data['password_user']=md5($password) ;
+        
+        $q = $this->db->update('tb_user',$data);
+
+        if($q){
+            $response['pesan'] = "Update data user berhasil";
+            $response['status'] = 200;
+        }else{
+            $response['pesan'] = "Update data user gagal";
+            $response['status'] = 404;
+        }
+        
+        echo json_encode($response);
+    }
+
+    public function deleteUser(){
+        $id = $this->input->post('id');
+        $this->db->where('id_user',$id);
+
+        $status = $this->db->delete('tb_user');
+
+        if($status == true){
+            $response['pesan'] = "Hapus data user berhasil";
+            $response['status'] = 200;
+        }else{
+            $response['pesan'] = "Hapus data user gagal";
+            $response['status'] = 404;
+        }
+        
+        echo json_encode($response);
+    }
+
 }
